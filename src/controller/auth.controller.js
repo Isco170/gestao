@@ -43,7 +43,7 @@ async function login(request, response) {
                     data: null
                 })
 
-            delete existe["senha"];
+            existe.senha = null;
             let token = sign({ id: existe.id, role: existe.role}, authConfig.jwt.secret, {
                 subject: String(existe.id),
                 expiresIn: authConfig.jwt.expiresIn

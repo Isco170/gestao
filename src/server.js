@@ -1,8 +1,16 @@
 const express = require('express');
+const cors = require('cors');
 const userRoutes = require('./route/usuario.route');
 const authRoutes = require('./route/auth.route');
 
 const app = express();
+
+app.use(cors({
+    origin: "*",
+    methods: ["READ, GET, HEAD, PUT, PATCH, POST, DELETE"],
+    preflightContinue: true,
+    optionsSuccessStatus: 204
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
