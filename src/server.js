@@ -1,5 +1,6 @@
 const express = require('express');
 const userRoutes = require('./route/usuario.route');
+const authRoutes = require('./route/auth.route');
 
 const app = express();
 
@@ -9,6 +10,7 @@ app.use(express.urlencoded({ extended: false }));
 const sequelize = require('./database');
 
 app.use('/api', userRoutes);
+app.use('/api', authRoutes);
 
 const PORT = process.env.PORT || 3333;
 

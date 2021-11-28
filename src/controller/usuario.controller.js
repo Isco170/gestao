@@ -38,7 +38,7 @@ async function createUser(request, response){
     if(falha)
         return response.status(400).send({
             error: true,
-            msg,
+            message: msg,
             data: null
         })
     
