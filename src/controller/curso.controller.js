@@ -34,6 +34,90 @@ async function createCurso(request, response){
         }
 }
 
+async function readCurso(request, response){
+    try {
+        const cursos = await cursoModel.findAll();
+        return response.status(202).send({
+            error: false,
+            message: 'Lista de cursos',
+            data: cursos
+        });
+    } catch (error) {
+        return response.status(404).send({
+            error: true,
+            message: 'Erro listando cursos',
+            data: error
+        })
+    }
+}
+
+async function updateCurso(request, response){
+    const { id, descricao} = request.body;
+
+    let msg = [];
+    let falha = false;
+
+    if(!id){
+        falha = true;
+        msg.push('Selecione o curso que deseja modificar');
+    }
+
+    if(!descricao){
+        falha = true;
+        msg.push('O curso deve ter descrição');
+    }
+
+    if(falha)
+        return response.status(400).send({
+            error: true,
+            message: msg,
+            data: null
+        })
+    
+    try {
+        await cursoModel.update({descricao: descricao}, {where:{id: id}});
+        return response.status(202).send({
+            error: false,
+            message: 'Curso modificado',
+            data: null
+        })
+    } catch (error) {
+        return response.status(404).send({
+            error: true,
+            message: 'Falha modificando curso',
+            data: error
+        })
+    }
+}
+
+async function deleteCurso(request, response){
+    const id = request.params.id;
+    if(!id)
+        return response.status(400).send({
+            error: true,
+            message: 'Selecione o curso que deseja remover',
+            data: null
+        })
+    
+    try {
+        await cursoModel.destroy({where:{id: id}});
+        return response.status(200).send({
+            error: false,
+            message: 'Curso removido',
+            data: null
+        })
+    } catch (error) {
+        return response.status(404).send({
+            error: true,
+            message: 'Falha removendo curso',
+            data: error
+        })
+    }
+}
+
 module.exports = {
-    createCurso
+    createCurso,
+    readCurso,
+    updateCurso,
+    deleteCurso
 }
