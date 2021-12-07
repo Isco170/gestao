@@ -5,6 +5,7 @@ const authRoutes = require('./route/auth.route');
 const cursoRoutes = require('./route/curso.route');
 const cadeiraRoutes = require('./route/cadeira.route');
 const cursocadeiraRoutes = require('./route/cursocadeira.route');
+const cordRoutes = require('./route/coordenador.route');
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use('/api', authRoutes);
 app.use('/api', cursoRoutes);
 app.use('/api', cadeiraRoutes);
 app.use('/api', cursocadeiraRoutes);
+app.use('/api/cord', cordRoutes);
 
 const PORT = process.env.PORT || 3333;
 

@@ -1,5 +1,6 @@
 const userModel = require('../model/usuario.model');
 
+
 async function createAdmin(request, response){
     const { nome, apelido, telefone, email, role, senha} = request.body;
 
