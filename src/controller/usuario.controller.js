@@ -118,8 +118,35 @@ async function createUser(request, response){
 
 }
 
+async function deleteUser(request, response){
+    const id = request.params.id;
+
+    if(!id)
+        return response.status(400).json({
+            error: true,
+            message: 'Selecione o usuário que deseja remover',
+            data: null
+        })
+    
+        try {
+            await userModel.destroy({where:{ id: id}});
+            return response.status(202).json({
+                error: false,
+                message: 'Usuário removido',
+                data: null
+            })
+        } catch (error) {
+            return response.status(500).json({
+                error: true,
+                message: 'Falha ao remover usuário',
+                data: error
+            })
+        }
+}
+
 
 module.exports = {
     createAdmin,
-    createUser
+    createUser,
+    deleteUser
 }
