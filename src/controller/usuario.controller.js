@@ -30,6 +30,7 @@ async function createUser(request, response){
         falha = true;
         msg.push("Função não foi especificada")
     }
+    
     if(!senha){
         falha = true;
         msg.push("Deve escrever senha")
