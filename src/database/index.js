@@ -6,6 +6,7 @@ const { Sequelize } = require('sequelize');
 //     dialect: 'mysql'
 // });
 
+
 const sequelize = new Sequelize('de20kjd3gtflj5', 'fprsqkzcofhrdn', '15d3d0a200a4cbee7e0693f087e91c475a3c76b631e99fe93015bd53e4638a17', {
     repositoryMode: true,
     port: 5432,
