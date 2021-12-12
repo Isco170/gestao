@@ -11,7 +11,7 @@ const sequelize = new Sequelize('de20kjd3gtflj5', 'fprsqkzcofhrdn', '15d3d0a200a
     repositoryMode: true,
     port: 5432,
     host: 'ec2-18-210-159-154.compute-1.amazonaws.com',
-    dialect: 'postgres',
+    dialect: "postgres",
     "dialectOption":{
         ssl: {
             require: true,
