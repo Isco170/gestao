@@ -12,7 +12,7 @@ const sequelize = new Sequelize('de20kjd3gtflj5', 'fprsqkzcofhrdn', '15d3d0a200a
     port: 5432,
     host: 'ec2-18-210-159-154.compute-1.amazonaws.com',
     dialect: "postgres",
-    dialectOption:{
+    "dialectOptions": {
         ssl: {
             require: true,
             rejectUnauthorized: false
