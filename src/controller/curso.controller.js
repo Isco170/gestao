@@ -36,14 +36,22 @@ async function createCurso(request, response){
 
 async function readCurso(request, response){
     try {
-        const cursos = await cursoModel.findAll();
+        const cursos = await cursoModel.findAll({});
+
+        if(cursos.length == 0)
+            return response.status(404).send({
+                error: true,
+                message: 'Sem cursos',
+                dara: null
+            })
+
         return response.status(202).send({
             error: false,
             message: 'Lista de cursos',
             data: cursos
         });
     } catch (error) {
-        return response.status(404).send({
+        return response.status(500).send({
             error: true,
             message: 'Erro listando cursos',
             data: error

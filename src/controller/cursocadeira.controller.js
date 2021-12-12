@@ -1,7 +1,7 @@
 const cursoCadeiraModel = require('../model/cursocadeira.model');
 
 async function create(request, response) {
-    const { curso_id, cadeira_id } = request.body;
+    const { curso_id, cadeiras } = request.body;
 
     let msg = [];
     let falha = false;
@@ -11,9 +11,9 @@ async function create(request, response) {
         msg.push('Selecione o curso a que quer adicionar a cadeira');
     }
 
-    if (!cadeira_id) {
+    if (!cadeiras) {
         falha = true;
-        msg.push('Selecione a cadeira que deseja adicionar ao curso');
+        msg.push('Selecione pelo menos uma cadeira que deseja adicionar ao curso');
     }
 
     if (falha)
@@ -23,20 +23,17 @@ async function create(request, response) {
             data: null
         })
     
-    try {
-        await cursoCadeiraModel.create({ cadeira_id: cadeira_id, curso_id: curso_id});
-        return response.status(202).send({
-            error: false,
-            message: 'Cadeira adicionada ao curso',
-            data: null
-        })
-    } catch (error) {
-        return response.status(404).send({
-            error: true,
-            mesage: 'Falha ao adicionar a cadeira ao curso',
-            data: error
-        })
+    for (let index = 0; index < cadeiras.length; index++) {
+        const existe = await cursoCadeiraModel.findOne({ where:{ curso_id: curso_id, cadeira_id: cadeiras[index]}});
+        if(!existe){
+            const addCadeira = await cursoCadeiraModel.create({ curso_id: curso_id, cadeira_id: cadeiras[index]});
+        }
     }
+    return response.status(202).json({
+        error: false,
+        message: 'Cadeira(s) adicionada(s)',
+        data: null
+    })
 }
 
 module.exports = {
