@@ -7,6 +7,8 @@ const cadeiraRoutes = require('./route/cadeira.route');
 const cursocadeiraRoutes = require('./route/cursocadeira.route');
 const cordRoutes = require('./route/coordenador.route');
 const cordcursoRoutes = require('./route/cordcurso.route');
+const profRoutes = require('./route/professor.route');
+const profcadeiraRoutes = require('./route/professorcadeira.route');
 
 const app = express();
 
@@ -29,6 +31,8 @@ app.use('/api', cadeiraRoutes);
 app.use('/api', cursocadeiraRoutes);
 app.use('/api/cord', cordRoutes);
 app.use('/api', cordcursoRoutes);
+app.use('/api', profRoutes);
+app.use('/api', profcadeiraRoutes);
 
 const PORT = process.env.PORT || 3333;
 
@@ -36,7 +40,7 @@ app.listen(PORT, () => {
     console.log("Listining");
     sequelize.authenticate().then(async () => {
         console.log("Conectado a base de dados");
-        // await sequelize.sync({ alter: true });
+        await sequelize.sync({ alter: true });
     }).catch((e) => {
         console.log("Erro: " + e);
     })

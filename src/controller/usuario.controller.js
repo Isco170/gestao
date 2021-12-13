@@ -102,6 +102,7 @@ async function createUser(request, response){
         let senha = 'Escola' +date.getFullYear();
         
         const user = await userModel.create({ nome: nome, apelido: apelido, telefone: telefone, email: email, role: role, senha: senha});
+        user.senha = null;
         return response.status(202).json({
             error: false,
             message: 'Usuário criado',
