@@ -37,6 +37,12 @@ async function createCadeira(request, response){
 async function readCadeira(request, response){
     try {
         const cadeiras = await cadeiraModel.findAll();
+        if(cadeiras.length == 0)
+            return response.status(404).send({
+                error: true,
+                message: 'Sem cadeiras',
+                data: null
+            })
         return response.status(202).send({
             error: false,
             message: 'Lista de cadeiras',
