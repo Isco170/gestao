@@ -38,6 +38,16 @@ async function addCadeira(request, response) {
 
 }
 
+async function readCadeiras(request, response){
+
+}
+
+async function readOneCadeira(request, response){
+
+}
+
 module.exports = {
-    addCadeira
+    addCadeira,
+    readCadeiras,
+    readOneCadeira
 }
