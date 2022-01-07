@@ -46,11 +46,57 @@ async function addTurma(request, response) {
 }
 
 async function readTurmas(request, response){
-
+    try {
+        const turmas = await turmaModel.findAll({});
+        if(turmas.length < 0)
+            return response.status(404).send({
+                error: true,
+                message: 'Sem turmas',
+                data: null
+            })
+        return response.status(202).send({
+            error: false,
+            message: 'Lista de turmas',
+            data: turmas
+        })
+    } catch (error) {
+        return response.status(500).send({
+            error: true,
+            message: 'Falha ao listar turmas',
+            data: error
+        })
+    }
 }
 
 async function readOneTurma(request, response){
-
+    const id = request.params.id;
+    if(!id)
+        return response.status(404).send({
+            error: true,
+            message: 'Selecione a turma que deseja ver',
+            data: null
+        })
+    
+        try {
+            const turma = await turmaModel.findOne({ where:{ id: id}});
+            if(!turma)
+                return response.status(404).send({
+                    error: true,
+                    message: 'Turma não encontrada',
+                    data: null
+                })
+            return response.status(202).send({
+                error: false,
+                message: 'Turma encontrada',
+                data: turma
+            })
+        } catch (error) {
+            return response.status(500).send({
+                error: true,
+                message: 'Falha ao pesquisar turma',
+                data: error
+            })
+        }
 }
 
 module.exports = {
