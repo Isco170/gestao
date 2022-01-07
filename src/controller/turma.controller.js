@@ -1,0 +1,60 @@
+const turmaModel = require('../model/turma.model');
+
+async function addTurma(request, response) {
+    const { designacao, curso_id, turno  } = request.body;
+
+    let msg = [];
+    let falha = false;
+
+    if (!designacao) {
+        falha = true;
+        msg.push('Digite o nome da turma');
+    }
+
+    if (!curso_id) {
+        falha = true;
+        msg.push('Indique o curso que a turma pertence');
+    }
+
+    if (!curso_id) {
+        falha = true;
+        msg.push('Indique o turno da turma');
+    }
+
+    if (falha)
+        return response.status(400).send({
+            error: true,
+            message: msg,
+            data: null
+        })
+    
+    try {
+        const turma = await turmaModel.create({ designacao: designacao, curso_id: curso_id, turno: turno});
+        return response.status(202).send({
+            error: false,
+            message: 'Turma adicionada',
+            data: turma
+        })
+    } catch (error) {
+        return response.status(500).send({
+            error: true,
+            message: 'Falha ao adicionar turma',
+            data: error
+        })
+    }
+
+}
+
+async function readTurmas(request, response){
+
+}
+
+async function readOneTurma(request, response){
+
+}
+
+module.exports = {
+    addTurma,
+    readTurmas,
+    readOneTurma
+}

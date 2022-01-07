@@ -9,6 +9,7 @@ const cordRoutes = require('./route/coordenador.route');
 const cordcursoRoutes = require('./route/cordcurso.route');
 const profRoutes = require('./route/professor.route');
 const profcadeiraRoutes = require('./route/professorcadeira.route');
+const turmaRoutes = require('./route/turma.route');
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.use('/api/cord', cordRoutes);
 app.use('/api', cordcursoRoutes);
 app.use('/api', profRoutes);
 app.use('/api', profcadeiraRoutes);
+app.use('/api', turmaRoutes);
 
 const PORT = process.env.PORT || 3333;
 
