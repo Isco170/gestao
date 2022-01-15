@@ -4,5 +4,8 @@ const isAuthenticated = require('../middlewares/isAuthenticate');
 var router = express.Router();
 
 router.post('/cursocadeira', cursocadeiraController.create);
+router.get('/cursocadeira/:id', cursocadeiraController.read);
+router.delete('/cursocadeira', cursocadeiraController.removeCadeira);
+
 
 module.exports = router;
