@@ -61,7 +61,7 @@ async function readCadeiras(request, response){
         
         for (let index = 0; index < profCad.length; index++) {
             try {
-                const cadeira = await cadeiraModel.findOne({where:{ id: profCad[index]}})
+                const cadeira = await cadeiraModel.findOne({where:{ id: profCad[index].cadeira_id}})
                 lista.push({
                     'id': cadeira.id,
                     'descricao': cadeira.descricao
