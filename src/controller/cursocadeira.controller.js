@@ -46,10 +46,10 @@ async function read(request, response) {
             message: 'Selecione o curso que deseja listar cadeiras',
             data: null
         })
-    let lista = null;
+    let lista = [];
 
     try {
-        const cadCurso = await cadeiracurso.findAll({ where: { curso_id: id } });
+        const cadCurso = await cursoCadeiraModel.findAll({ where: { curso_id: id } });
         if (cadCurso.length == 0)
             return response.status(500).send({
                 error: true,
@@ -59,12 +59,18 @@ async function read(request, response) {
 
         for (let index = 0; index < cadCurso.length; index++) {
             const cadeira = await cadeiraModel.findOne({ where: { id: cadCurso[index].cadeira_id } });
-            lista.push({
-                'id': cadeira.id,
-                'descricao': cadeira.descricao
-            })
-
+            if(cadeira)
+                lista.push({
+                    'id': cadeira.id,
+                    'descricao': cadeira.descricao
+                })
         }
+
+        return response.status(202).send({
+            error: false,
+            message: 'Lista de cadeiras do curso',
+            data: lista
+        })
     } catch (error) {
         return response.status(500).send({
             error: true,
@@ -99,7 +105,7 @@ async function removeCadeira(request, response){
     
     for (let index = 0; index < cadeiras.length; index++) {
         try {
-            await cadeiracurso.destroy({ where:{ curso_id: curso_id, cadeira_id: cadeiras[index]}});
+            await cursoCadeiraModel.destroy({ where:{ curso_id: curso_id, cadeira_id: cadeiras[index]}});
         } catch (error) {
             
         }        
