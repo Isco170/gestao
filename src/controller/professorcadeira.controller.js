@@ -1,4 +1,5 @@
 const profCadeira = require('../model/professorcadeira.model');
+const cadeiraModel = require('../model/cadeira.model');
 
 async function addCadeira(request, response) {
     const { usuario_id, cadeiras } = request.body;
@@ -39,7 +40,48 @@ async function addCadeira(request, response) {
 }
 
 async function readCadeiras(request, response){
+    const id = request.params.usuario_id;
+    if(!id)
+        return response.status(400).send({
+            error: true,
+            message: 'Selecione o professor',
+            data: null
+        })
+    
+    let lista = [];
 
+    try {
+        const profCad = await profCadeira.findAll({where:{ usuario_id: id }});
+        if(profCad.length == 0)
+            return response.status(404).send({
+                error: true,
+                message: 'Professor sem cadeiras atribuidas',
+                data: null
+            })
+        
+        for (let index = 0; index < profCad.length; index++) {
+            try {
+                const cadeira = await cadeiraModel.findOne({where:{ id: profCad[index]}})
+                lista.push({
+                    'id': cadeira.id,
+                    'descricao': cadeira.descricao
+                })
+            } catch (error) {
+                
+            }
+        }
+        return response.status(202).send({
+            error: false,
+            message: 'Lista de cadeiras atribuidas ao professor',
+            data: lista
+        })
+    } catch (error) {
+        return response.status(500).send({
+            error: true,
+            message: 'Falha ao listar cadeiras',
+            data: error
+        })
+    }
 }
 
 async function readOneCadeira(request, response){
