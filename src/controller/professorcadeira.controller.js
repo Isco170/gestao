@@ -84,12 +84,46 @@ async function readCadeiras(request, response){
     }
 }
 
-async function readOneCadeira(request, response){
+async function removeCadeira(request, response){
+    const {usuario_id, cadeiras} = request.body;
 
+    let msg = [];
+    let falha = false;
+
+    if (!usuario_id) {
+        falha = true;
+        msg.push('Selecione o professor a quem quer remover a(s) cadeira(s)');
+    }
+
+    if (!cadeiras || cadeiras.length == 0) {
+        falha = true;
+        msg.push('Selecione pelo menos uma cadeira que deseja remover ao professor');
+    }
+
+    if (falha)
+        return response.status(400).send({
+            error: true,
+            message: msg,
+            data: null
+        })
+    
+    for (let index = 0; index < cadeiras.length; index++) {
+        try {
+            await profCadeira.destroy({where:{ cadeira_id: cadeiras[index]}});
+        } catch (error) {
+            
+        }
+    }
+
+    return response.status(202).send({
+        error: false,
+        message: 'Cadeira(s) removida(s)',
+        data: null
+    })
 }
 
 module.exports = {
     addCadeira,
     readCadeiras,
-    readOneCadeira
+    removeCadeira
 }
