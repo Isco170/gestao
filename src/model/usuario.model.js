@@ -27,8 +27,7 @@ Usuario.init(
         },
         senha: {
             type: DataTypes.TEXT,
-            allowNull: false,
-            unique: true
+            allowNull: false
         },
         role:{
             type: DataTypes.INTEGER,
