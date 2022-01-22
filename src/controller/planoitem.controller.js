@@ -40,6 +40,32 @@ async function createItem(request, response){
     }
 }
 
+async function readItens(request, response){
+    const id = request.params.id;
+    if(!id)
+        return response.status(404).send({
+            error: true,
+            message: 'Selecione o plano',
+            data: null
+        })
+    
+    try {
+        const lista = await planoitemModel.findAll({where:{ planoanalitico_id: id}});
+        return response.status(202).send({
+            error: false,
+            message: 'Lista de itens do plano',
+            data: lista
+        })
+    } catch (error) {
+        return response.status(500).send({
+            error: true,
+            message: 'Falha ao lista itens do plano',
+            data: error
+        })
+    }
+}
+
 module.exports = {
-    createItem
+    createItem,
+    readItens
 }
