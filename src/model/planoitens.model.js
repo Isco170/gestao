@@ -3,14 +3,14 @@ const database = require('../database');
 
 class PlanoItens extends Model {}
 
-PlanoAnalitico.init(
+PlanoItens.init(
     {
         descricao:{
             type: DataTypes.STRING
         },
         planoanalitico_id:{
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false 
         },
         concluido:{
             type: DataTypes.BOOLEAN,
