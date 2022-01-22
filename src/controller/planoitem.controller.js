@@ -51,6 +51,12 @@ async function readItens(request, response){
     
     try {
         const lista = await planoitemModel.findAll({where:{ planoanalitico_id: id}});
+        if(lista.length == 0)
+            return response.status(404).send({
+                error: true,
+                message: 'Plano sem itens',
+                data: null
+            })
         return response.status(202).send({
             error: false,
             message: 'Lista de itens do plano',
@@ -65,7 +71,33 @@ async function readItens(request, response){
     }
 }
 
+async function deleteitem(request, response){
+    const id = request.params.id;
+    if(!id)
+        return response.status(404).send({
+            error: true,
+            message: 'Selecione o item que deseja apagar',
+            data: null
+        })
+    
+    try {
+        await planoitemModel.destroy({where:{ id: id}});
+        return response.status(202).send({
+            error: false,
+            message: 'Item apagado',
+            data: null
+        })
+    } catch (error) {
+        return response.status(500).send({
+            error: true,
+            messgae: 'Falha ao apagar item',
+            data: error
+        })
+    }
+}
+
 module.exports = {
     createItem,
-    readItens
+    readItens,
+    deleteitem
 }
