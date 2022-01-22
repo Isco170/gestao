@@ -1,0 +1,1 @@
+const planoitemModel = require('../model/planoitens.model');
