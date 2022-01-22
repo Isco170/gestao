@@ -91,7 +91,34 @@ async function readPlano(request, response){
     }
 }
 
+async function deletePlano(request, response){
+    const id = request.params.id;
+    
+    if(!id)
+        return response.status(400).send({
+            error: true,
+            message: 'Selecione o curso que deseja apagar',
+            data: null
+        })
+    
+    try {
+        await planoModel.destroy({ where:{ id: id}});
+        return response.status(202).send({
+            error: false,
+            message: 'Plano apagado',
+            data: null
+        })
+    } catch (error) {
+        return response.status(500).send({
+            error: true,
+            message: 'Falha ao apagar plano',
+            data: null
+        })
+    }
+}
+
 module.exports = {
     createPlano,
-    readPlano
+    readPlano,
+    deletePlano
 }
