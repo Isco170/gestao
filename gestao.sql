@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 19, 2022 at 06:05 PM
+-- Generation Time: Jan 22, 2022 at 07:06 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.10
 
@@ -120,6 +120,56 @@ INSERT INTO `cursocadeira` (`id`, `curso_id`, `cadeira_id`, `createdAt`, `update
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `planoanalitico`
+--
+
+CREATE TABLE `planoanalitico` (
+  `id` int(11) NOT NULL,
+  `descricao` varchar(255) DEFAULT NULL,
+  `cadeira_id` int(11) NOT NULL,
+  `curso_id` int(11) NOT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `planoanalitico`
+--
+
+INSERT INTO `planoanalitico` (`id`, `descricao`, `cadeira_id`, `curso_id`, `createdAt`, `updatedAt`) VALUES
+(1, 'Descrição 1', 1, 1, '2022-01-22 16:27:26', '2022-01-22 16:27:26'),
+(3, 'Descricao 1', 1, 1, '2022-01-22 17:14:30', '2022-01-22 17:14:30'),
+(4, 'Descrição 2', 2, 2, '2022-01-22 17:58:13', '2022-01-22 17:58:13'),
+(5, 'Descrição 4', 4, 4, '2022-01-22 17:59:16', '2022-01-22 17:59:16');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `planoitens`
+--
+
+CREATE TABLE `planoitens` (
+  `id` int(11) NOT NULL,
+  `descricao` varchar(255) DEFAULT NULL,
+  `planoanalitico_id` int(11) NOT NULL,
+  `concluido` tinyint(1) DEFAULT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `planoitens`
+--
+
+INSERT INTO `planoitens` (`id`, `descricao`, `planoanalitico_id`, `concluido`, `createdAt`, `updatedAt`) VALUES
+(2, 'Descricao 1', 1, 1, '2022-01-22 17:47:45', '2022-01-22 17:49:38'),
+(3, 'Descricao 2', 1, 1, '2022-01-22 18:02:53', '2022-01-22 18:04:01'),
+(4, 'Descricao 3', 1, NULL, '2022-01-22 18:02:56', '2022-01-22 18:02:56'),
+(5, 'Descricao 4', 1, NULL, '2022-01-22 18:02:59', '2022-01-22 18:02:59');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `professorcadeira`
 --
 
@@ -204,7 +254,9 @@ ALTER TABLE `cadeira`
   ADD UNIQUE KEY `descricao_4` (`descricao`),
   ADD UNIQUE KEY `descricao_5` (`descricao`),
   ADD UNIQUE KEY `descricao_6` (`descricao`),
-  ADD UNIQUE KEY `descricao_7` (`descricao`);
+  ADD UNIQUE KEY `descricao_7` (`descricao`),
+  ADD UNIQUE KEY `descricao_8` (`descricao`),
+  ADD UNIQUE KEY `descricao_9` (`descricao`);
 
 --
 -- Indexes for table `cordcurso`
@@ -223,12 +275,26 @@ ALTER TABLE `curso`
   ADD UNIQUE KEY `descricao_4` (`descricao`),
   ADD UNIQUE KEY `descricao_5` (`descricao`),
   ADD UNIQUE KEY `descricao_6` (`descricao`),
-  ADD UNIQUE KEY `descricao_7` (`descricao`);
+  ADD UNIQUE KEY `descricao_7` (`descricao`),
+  ADD UNIQUE KEY `descricao_8` (`descricao`),
+  ADD UNIQUE KEY `descricao_9` (`descricao`);
 
 --
 -- Indexes for table `cursocadeira`
 --
 ALTER TABLE `cursocadeira`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `planoanalitico`
+--
+ALTER TABLE `planoanalitico`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `planoitens`
+--
+ALTER TABLE `planoitens`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -262,6 +328,10 @@ ALTER TABLE `usuario`
   ADD UNIQUE KEY `telefone_6` (`telefone`),
   ADD UNIQUE KEY `email_7` (`email`),
   ADD UNIQUE KEY `telefone_7` (`telefone`),
+  ADD UNIQUE KEY `email_8` (`email`),
+  ADD UNIQUE KEY `telefone_8` (`telefone`),
+  ADD UNIQUE KEY `email_9` (`email`),
+  ADD UNIQUE KEY `telefone_9` (`telefone`),
   ADD UNIQUE KEY `senha` (`senha`) USING HASH,
   ADD UNIQUE KEY `senha_2` (`senha`) USING HASH,
   ADD UNIQUE KEY `senha_3` (`senha`) USING HASH,
@@ -296,6 +366,18 @@ ALTER TABLE `curso`
 -- AUTO_INCREMENT for table `cursocadeira`
 --
 ALTER TABLE `cursocadeira`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `planoanalitico`
+--
+ALTER TABLE `planoanalitico`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `planoitens`
+--
+ALTER TABLE `planoitens`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
