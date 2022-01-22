@@ -1,4 +1,5 @@
 const planoModel = require('../model/planoanalitico.model');
+const planoitensModel = require('../model/planoitens.model');
 
 async function createPlano(request, response){
     const { descricao, cadeira_id, curso_id} = request.body;
@@ -67,20 +68,26 @@ async function readPlano(request, response){
             message: msg,
             data: null
         })
-    
-    if(!planoModel)
-        return response.status(404).send({
-            error: true,
-            message: 'Selecione a cadeira que deseja ver o plano',
-            data: null
-        })
 
     try {
-        const plano = await planoModel.findOne({ curso_id: curso_id, cadeira_id: cadeira_id});
+        const plano = await planoModel.findOne({ where:{curso_id: curso_id, cadeira_id: cadeira_id}});
+
+        if(!plano)
+            return response.status(404).send({
+                error: true,
+                message: 'Plano não foi achado',
+                data: null
+            })
+        const listaItens = await planoitensModel.findAll({where:{ planoanalitico_id: plano.id}});
+
         return response.status(202).send({
             error:false,
             message: 'Plano analítico',
-            data: plano
+            data: {
+                'plano_id': plano.id,
+                'plano_descricao': plano.descricao,
+                'itens': listaItens.length > 0 ? listaItens : null
+            }
         })
     } catch (error) {
         return response.status(500).send({
