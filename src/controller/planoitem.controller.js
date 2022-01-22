@@ -96,8 +96,35 @@ async function deleteitem(request, response){
     }
 }
 
+async function concluiritem(request, response){
+    const id = request.params.id;
+
+    if(!id)
+        return response.status(404).send({
+            error: true,
+            message: 'Selecione o plano que quer marcar como concluído',
+            data: null
+        })
+    
+    try {
+        await planoitemModel.update({ concluido: true}, {where:{ id: id}});
+        return response.status(202).send({
+            error: false,
+            message: 'Item concluído',
+            data: null
+        })
+    } catch (error) {
+        return response.status(500).send({
+            error: true,
+            message: 'Falha ao marcar como concluído',
+            data: error
+        })
+    }
+}
+
 module.exports = {
     createItem,
     readItens,
-    deleteitem
+    deleteitem,
+    concluiritem
 }
