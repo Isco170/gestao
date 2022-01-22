@@ -14,7 +14,7 @@ PlanoItens.init(
         },
         concluido:{
             type: DataTypes.BOOLEAN,
-            default: false
+           defaultValue: false
         }
     },{
         sequelize: database,
