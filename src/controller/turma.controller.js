@@ -64,7 +64,7 @@ async function readTurmas(request, response) {
                 lista.push({
                     'id': turmas[index].id,
                     'designacao': turmas[index].designacao,
-                    'curso': curso.designacao,
+                    'curso': curso.descricao,
                     'turno': turmas[index].turno
                 })
             }
