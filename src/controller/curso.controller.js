@@ -128,4 +128,4 @@ module.exports = {
     readCurso,
     updateCurso,
     deleteCurso
-}
+} 

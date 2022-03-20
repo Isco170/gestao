@@ -1,7 +1,8 @@
+const Curso = require('../model/curso.model');
 const turmaModel = require('../model/turma.model');
 
 async function addTurma(request, response) {
-    const { designacao, curso_id, turno  } = request.body;
+    const { designacao, curso_id, turno } = request.body;
 
     let msg = [];
     let falha = false;
@@ -27,9 +28,9 @@ async function addTurma(request, response) {
             message: msg,
             data: null
         })
-    
+
     try {
-        const turma = await turmaModel.create({ designacao: designacao, curso_id: curso_id, turno: turno});
+        const turma = await turmaModel.create({ designacao: designacao, curso_id: curso_id, turno: turno });
         return response.status(202).send({
             error: false,
             message: 'Turma adicionada',
@@ -45,19 +46,32 @@ async function addTurma(request, response) {
 
 }
 
-async function readTurmas(request, response){
+async function readTurmas(request, response) {
     try {
         const turmas = await turmaModel.findAll({});
-        if(turmas.length < 0)
+
+        let lista = []
+
+        if (turmas.length < 0)
             return response.status(404).send({
                 error: true,
                 message: 'Sem turmas',
                 data: null
             })
+
+        for (let index = 0; index < turmas.length; index++) {
+            const curso = await Curso.findOne({ where: { id: turmas[index].curso_id } })
+            lista.push({
+                'id': turmas[index].id,
+                'designacao': turmas[index].designacao,
+                'curso': curso.designacao,
+                'turno': turmas[index].turno
+            })
+        }
         return response.status(202).send({
             error: false,
             message: 'Lista de turmas',
-            data: turmas
+            data: lista
         })
     } catch (error) {
         return response.status(500).send({
@@ -68,35 +82,35 @@ async function readTurmas(request, response){
     }
 }
 
-async function readOneTurma(request, response){
+async function readOneTurma(request, response) {
     const id = request.params.id;
-    if(!id)
+    if (!id)
         return response.status(404).send({
             error: true,
             message: 'Selecione a turma que deseja ver',
             data: null
         })
-    
-        try {
-            const turma = await turmaModel.findOne({ where:{ id: id}});
-            if(!turma)
-                return response.status(404).send({
-                    error: true,
-                    message: 'Turma não encontrada',
-                    data: null
-                })
-            return response.status(202).send({
-                error: false,
-                message: 'Turma encontrada',
-                data: turma
-            })
-        } catch (error) {
-            return response.status(500).send({
+
+    try {
+        const turma = await turmaModel.findOne({ where: { id: id } });
+        if (!turma)
+            return response.status(404).send({
                 error: true,
-                message: 'Falha ao pesquisar turma',
-                data: error
+                message: 'Turma não encontrada',
+                data: null
             })
-        }
+        return response.status(202).send({
+            error: false,
+            message: 'Turma encontrada',
+            data: turma
+        })
+    } catch (error) {
+        return response.status(500).send({
+            error: true,
+            message: 'Falha ao pesquisar turma',
+            data: error
+        })
+    }
 }
 
 module.exports = {
