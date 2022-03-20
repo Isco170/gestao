@@ -49,9 +49,6 @@ async function addTurma(request, response) {
 async function readTurmas(request, response) {
     try {
         const turmas = await turmaModel.findAll({});
-
-        let lista = []
-
         if (turmas.length < 0)
             return response.status(404).send({
                 error: true,
@@ -59,20 +56,31 @@ async function readTurmas(request, response) {
                 data: null
             })
 
-        for (let index = 0; index < turmas.length; index++) {
-            const curso = await Curso.findOne({ where: { id: turmas[index].curso_id } })
-            lista.push({
-                'id': turmas[index].id,
-                'designacao': turmas[index].designacao,
-                'curso': curso.designacao,
-                'turno': turmas[index].turno
+        try {
+            let lista = []
+            
+            for (let index = 0; index < turmas.length; index++) {
+                const curso = await Curso.findOne({ where: { id: turmas[index].curso_id } })
+                lista.push({
+                    'id': turmas[index].id,
+                    'designacao': turmas[index].designacao,
+                    'curso': curso.designacao,
+                    'turno': turmas[index].turno
+                })
+            }
+            return response.status(202).send({
+                error: false,
+                message: 'Lista de turmas',
+                data: lista
+            })
+
+        } catch (error) {
+            return response.status(500).send({
+                error: true,
+                message: 'Falha ao buscar cursos',
+                data: error
             })
         }
-        return response.status(202).send({
-            error: false,
-            message: 'Lista de turmas',
-            data: lista
-        })
     } catch (error) {
         return response.status(500).send({
             error: true,
