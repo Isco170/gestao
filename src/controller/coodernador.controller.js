@@ -2,7 +2,7 @@ const usuario = require('../model/usuario.model');
 
 async function read(request, response){
     try {
-        const cord = await usuario.findAll({ where:{ role: 2}});
+        const cord = await usuario.findAll();
         return response.status(202).json({
             error: false,
             message: 'Lista de coordenadores',
@@ -13,7 +13,7 @@ async function read(request, response){
             error: true,
             message: 'Falha ao listar coordenadores',
             data: error
-        })
+        }) 
     }
 }
 
