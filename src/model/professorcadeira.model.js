@@ -12,6 +12,11 @@ ProfessorCadeira.init(
         usuario_id:{
             type: DataTypes.INTEGER,
             allowNull: false
+        },
+        curso_id:{
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 1
         }
     },
     {

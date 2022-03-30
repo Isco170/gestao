@@ -1,8 +1,9 @@
 const profCadeira = require('../model/professorcadeira.model');
 const cadeiraModel = require('../model/cadeira.model');
+const cursoModel = require('../model/curso.model')
 
 async function addCadeira(request, response) {
-    const { usuario_id, cadeiras } = request.body;
+    const { usuario_id, cadeiras, curso } = request.body;
 
     let msg = [];
     let falha = false;
@@ -17,6 +18,11 @@ async function addCadeira(request, response) {
         msg.push('Selecione pelo menos uma cadeira que deseja atribuir ao professor');
     }
 
+    if (!curso) {
+        falha = true;
+        msg.push('Selecione o curso');
+    }
+
     if (falha)
         return response.status(400).send({
             error: true,
@@ -26,7 +32,7 @@ async function addCadeira(request, response) {
 
     for (let index = 0; index < cadeiras.length; index++) {
         try {
-            await profCadeira.create({ cadeira_id: cadeiras[index], usuario_id: usuario_id });
+            await profCadeira.create({ cadeira_id: cadeiras[index], usuario_id: usuario_id, curso: curso });
         } catch (error) {
         }
     }
@@ -62,9 +68,11 @@ async function readCadeiras(request, response){
         for (let index = 0; index < profCad.length; index++) {
             try {
                 const cadeira = await cadeiraModel.findOne({where:{ id: profCad[index].cadeira_id}})
+                const curso = await cursoModel.findOne({where:{id: profCad[index].curso_id}})
                 lista.push({
                     'id': cadeira.id,
-                    'descricao': cadeira.descricao
+                    'descricao': cadeira.descricao,
+                    'curso': curso.descricao
                 })
             } catch (error) {
                 
