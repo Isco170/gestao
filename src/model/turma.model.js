@@ -6,7 +6,7 @@ class Turma extends Model{}
 Turma.init(
     {
         designacao:{
-            type: DataTypes.SMALLINT,
+            type: DataTypes.STRING(255),
             allowNull: false
         },
         curso_id:{
