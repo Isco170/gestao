@@ -61,12 +61,13 @@ async function readTurmas(request, response) {
             
             for (let index = 0; index < turmas.length; index++) {
                 const curso = await Curso.findOne({ where: { id: turmas[index].curso_id } })
-                lista.push({
-                    'id': turmas[index].id,
-                    'designacao': turmas[index].designacao,
-                    'curso': curso.descricao,
-                    'turno': turmas[index].turno
-                })
+                if (curso)
+                    lista.push({
+                        'id': turmas[index].id,
+                        'designacao': turmas[index].designacao,
+                        'curso': curso.descricao,
+                        'turno': turmas[index].turno
+                    })
             }
             return response.status(202).send({
                 error: false,
