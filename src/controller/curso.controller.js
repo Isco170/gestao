@@ -1,7 +1,8 @@
 const cursoModel = require('../model/curso.model');
+const cordcursoModel = require('../model/cordcurso.model')
 
 async function createCurso(request, response){
-    const { descricao } = request.body;
+    const { descricao, coordenador } = request.body;
     
     let msg = [];
     let falha = false;
@@ -20,6 +21,16 @@ async function createCurso(request, response){
     
         try {
             const curso = await cursoModel.create({descricao: descricao});
+            if (coordenador)
+                try {
+                    await cordcursoModel.create({ usuario_id: coordenador, curso_id: curso.id});
+                } catch (error) {
+                    return response.status(404).send({
+                        error: true,
+                        message: 'Falha ao adicionar coordenador',
+                        data: error
+                    })                
+                }
             return response.status(202).send({
                 error: false,
                 message: 'Curso adicionado',
