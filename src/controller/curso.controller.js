@@ -1,5 +1,5 @@
 const cursoModel = require('../model/curso.model');
-const cordcursoModel = require('../model/cordcurso.model')
+const usuarioModel = require('../model/usuario.model')
 
 async function createCurso(request, response){
     const { descricao, coordenador } = request.body;
@@ -20,17 +20,8 @@ async function createCurso(request, response){
         })
     
         try {
-            const curso = await cursoModel.create({descricao: descricao});
-            if (coordenador)
-                try {
-                    await cordcursoModel.create({ usuario_id: coordenador, curso_id: curso.id});
-                } catch (error) {
-                    return response.status(404).send({
-                        error: true,
-                        message: 'Falha ao adicionar coordenador',
-                        data: error
-                    })                
-                }
+            const curso = await cursoModel.create({descricao: descricao, coordenador: coordenador});
+            
             return response.status(202).send({
                 error: false,
                 message: 'Curso adicionado',
@@ -48,6 +39,7 @@ async function createCurso(request, response){
 async function readCurso(request, response){
     try {
         const cursos = await cursoModel.findAll({});
+        let lista = [];
 
         if(cursos.length == 0)
             return response.status(404).send({
@@ -56,10 +48,29 @@ async function readCurso(request, response){
                 dara: null
             })
 
+        for (let index = 0; index < cursos.length; index++) {
+            if (cursos[index].coordenador){
+                let coord = await usuarioModel.findOne({where:{id: cursos[index].coordenador}})
+                console.log(coord)
+                lista.push({
+                    'id': cursos[index].id,
+                    'descricao': cursos[index].descricao,
+                    'coordenador_id': coord.id,
+                    'coordenador_nome': coord.nome
+                })
+            }else{
+                lista.push({
+                    'id': cursos[index].id,
+                    'descricao': cursos[index].descricao,
+                    'coordenador_id': 0,
+                    'coordenador_nome': 'Sem coordenador'
+                })
+            }   
+        }
         return response.status(202).send({
             error: false,
             message: 'Lista de cursos',
-            data: cursos
+            data: lista
         });
     } catch (error) {
         return response.status(500).send({

@@ -9,6 +9,10 @@ Curso.init(
             type: DataTypes.STRING,
             allowNull: false,
             unique: true
+        },
+        coordenador:{
+            type: DataTypes.INTEGER,
+            allowNull: true
         }
     },
     {
