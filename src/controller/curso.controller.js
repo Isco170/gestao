@@ -12,6 +12,11 @@ async function createCurso(request, response){
         msg.push("Curso sem descrição")
     }
 
+    if(!coordenador){
+        falha = true;
+        msg.push("Curso sem coordenador")
+    }
+
     if(falha)
         return response.status(400).send({
             error: true,
@@ -81,6 +86,24 @@ async function readCurso(request, response){
     }
 }
 
+async function readOne(request, response){
+    const id = request.params.id;
+    
+    const curso = await cursoModel.findOne({where:{ id: id}});
+    if (!curso)
+        return response.status(404).send({
+            error: true,
+            message: 'Sem curso',
+            data: null
+        })
+
+    return response.status(202).send({
+        error: false,
+        message: 'Curso',
+        data: curso
+    })
+}
+
 async function updateCurso(request, response){
     const { id, descricao} = request.body;
 
@@ -148,6 +171,7 @@ async function deleteCurso(request, response){
 module.exports = {
     createCurso,
     readCurso,
+    readOne,
     updateCurso,
     deleteCurso
 } 
