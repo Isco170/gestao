@@ -135,18 +135,23 @@ async function readAll(request, response){
                 data: null
             })
 
-        const listaItens = await planoitensModel.findAll({where:{ planoanalitico_id: plano.id}});
+        let planos = []
+        for (let index = 0; index < plano.length; index++) {
+            const listaItens = await planoitensModel.findAll({where:{ planoanalitico_id: plano[index].plano.id}});
+            planos.push(
+                'plano_id' = plano.id,
+                'plano_descricao' = plano.descricao,
+                'cadeira_id' = plano.cadeira_id,
+                'curso_id' = plano.curso_id,
+                'itens' = listaItens.length > 0 ? listaItens : null
+            )            
+        }
+
 
         return response.status(202).send({
             error:false,
-            message: 'Plano analítico',
-            data: {
-                'plano_id': plano.id,
-                'plano_descricao': plano.descricao,
-                'cadeira_id': plano.cadeira_id,
-                'curso_id': plano.curso_id,
-                'itens': listaItens.length > 0 ? listaItens : null
-            }
+            message: 'Planos analíticos',
+            data: planos
         })
     } catch (error) {
         return response.status(500).send({
