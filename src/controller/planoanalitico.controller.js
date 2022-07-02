@@ -124,6 +124,39 @@ async function deletePlano(request, response){
     }
 }
 
+async function readAll(request, response){
+    try {
+        const plano = await planoModel.findOne({});
+
+        if(!plano)
+            return response.status(404).send({
+                error: true,
+                message: 'Sem Planos',
+                data: null
+            })
+
+        const listaItens = await planoitensModel.findAll({where:{ planoanalitico_id: plano.id}});
+
+        return response.status(202).send({
+            error:false,
+            message: 'Plano analítico',
+            data: {
+                'plano_id': plano.id,
+                'plano_descricao': plano.descricao,
+                'cadeira_id': plano.cadeira_id,
+                'curso_id': plano.curso_id,
+                'itens': listaItens.length > 0 ? listaItens : null
+            }
+        })
+    } catch (error) {
+        return response.status(500).send({
+            error: true,
+            message: 'Falha ao buscar dados',
+            data: error
+        })
+    }
+}
+
 module.exports = {
     createPlano,
     readPlano,
