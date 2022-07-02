@@ -1,8 +1,8 @@
 const planoModel = require('../model/planoanalitico.model');
 const planoitensModel = require('../model/planoitens.model');
 
-async function createPlano(request, response){
-    const { descricao, cadeira_id, curso_id} = request.body;
+async function createPlano(request, response) {
+    const { descricao, cadeira_id, curso_id } = request.body;
 
     let msg = [];
     let falha = false;
@@ -28,9 +28,9 @@ async function createPlano(request, response){
             message: msg,
             data: null
         })
-    
+
     try {
-        const newPlano = await planoModel.create({ descricao: descricao, cadeira_id: cadeira_id, curso_id: curso_id});
+        const newPlano = await planoModel.create({ descricao: descricao, cadeira_id: cadeira_id, curso_id: curso_id });
         return response.status(202).send({
             error: false,
             message: 'Plano adicionado',
@@ -46,8 +46,8 @@ async function createPlano(request, response){
 
 }
 
-async function readPlano(request, response){
-    const { curso_id, cadeira_id} = request.body;
+async function readPlano(request, response) {
+    const { curso_id, cadeira_id } = request.body;
 
     let msg = [];
     let falha = false;
@@ -57,7 +57,7 @@ async function readPlano(request, response){
         msg.push('Selecione o curso da cadeira');
     }
 
-    if (!cadeira_id ){
+    if (!cadeira_id) {
         falha = true;
         msg.push('Selecione a cadeira que deseja ver o plano');
     }
@@ -70,18 +70,18 @@ async function readPlano(request, response){
         })
 
     try {
-        const plano = await planoModel.findOne({ where:{curso_id: curso_id, cadeira_id: cadeira_id}});
+        const plano = await planoModel.findOne({ where: { curso_id: curso_id, cadeira_id: cadeira_id } });
 
-        if(!plano)
+        if (!plano)
             return response.status(404).send({
                 error: true,
                 message: 'Plano não foi achado',
                 data: null
             })
-        const listaItens = await planoitensModel.findAll({where:{ planoanalitico_id: plano.id}});
+        const listaItens = await planoitensModel.findAll({ where: { planoanalitico_id: plano.id } });
 
         return response.status(202).send({
-            error:false,
+            error: false,
             message: 'Plano analítico',
             data: {
                 'plano_id': plano.id,
@@ -98,18 +98,18 @@ async function readPlano(request, response){
     }
 }
 
-async function deletePlano(request, response){
+async function deletePlano(request, response) {
     const id = request.params.id;
-    
-    if(!id)
+
+    if (!id)
         return response.status(400).send({
             error: true,
             message: 'Selecione o curso que deseja apagar',
             data: null
         })
-    
+
     try {
-        await planoModel.destroy({ where:{ id: id}});
+        await planoModel.destroy({ where: { id: id } });
         return response.status(202).send({
             error: false,
             message: 'Plano apagado',
@@ -124,11 +124,11 @@ async function deletePlano(request, response){
     }
 }
 
-async function readAll(request, response){
+async function readAll(request, response) {
     try {
         const plano = await planoModel.findAll({});
 
-        if(!plano)
+        if (!plano)
             return response.status(404).send({
                 error: true,
                 message: 'Sem Planos',
@@ -137,19 +137,19 @@ async function readAll(request, response){
 
         let planos = []
         for (let index = 0; index < plano.length; index++) {
-            const listaItens = await planoitensModel.findAll({where:{ planoanalitico_id: plano[index].plano.id}});
-            planos.push(
-                'plano_id' = plano[index].plano.id,
-                'plano_descricao' = plano[index].plano.descricao,
-                'cadeira_id' = plano[index].plano.cadeira_id,
-                'curso_id' = plano[index].plano.curso_id,
-                'itens' = listaItens.length > 0 ? listaItens : null
-            )            
+            const listaItens = await planoitensModel.findAll({ where: { planoanalitico_id: plano[index].plano.id } });
+            planos.push({
+                'plano_id': plano[index].plano.id,
+                'plano_descricao' : plano[index].plano.descricao,
+                'cadeira_id' : plano[index].plano.cadeira_id,
+                'curso_id' : plano[index].plano.curso_id,
+                'itens' : listaItens.length > 0 ? listaItens : null
+            })
         }
 
 
         return response.status(202).send({
-            error:false,
+            error: false,
             message: 'Planos analíticos',
             data: planos
         })
