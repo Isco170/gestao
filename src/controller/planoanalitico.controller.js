@@ -160,5 +160,6 @@ async function readAll(request, response){
 module.exports = {
     createPlano,
     readPlano,
-    deletePlano
+    deletePlano,
+    readAll
 }

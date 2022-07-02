@@ -4,6 +4,7 @@ const planoanaliticoController = require('../controller/planoanalitico.controlle
 
 router.post('/', planoanaliticoController.createPlano);
 router.get('/', planoanaliticoController.readPlano);
+router.get('/', planoanaliticoController.readAll);
 router.delete('/:id', planoanaliticoController.deletePlano);
 
 module.exports = router;
