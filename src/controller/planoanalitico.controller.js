@@ -139,8 +139,9 @@ async function readAll(request, response) {
         let planos = []
         for (let index = 0; index < plano.length; index++) {
             try{                
+                const listaItens = await planoitensModel.findAll({ where: { planoanalitico_id: plano[index].id } });
                 planos.push({
-                    'plano_id': plano[index].plano.id,
+                    'plano_id': plano[index].id,
                     'plano_descricao' : plano[index].descricao,
                     'cadeira_id' : plano[index].cadeira_id,
                     'curso_id' : plano[index].curso_id
