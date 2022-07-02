@@ -141,7 +141,7 @@ async function readAll(request, response) {
             try{                
                 planos.push({
                     'plano_id': plano[index].plano.id,
-                    'plano_descricao' : plano[index].plano.descricao,
+                    'plano_descricao' : plano[index].descricao,
                     'cadeira_id' : plano[index].cadeira_id,
                     'curso_id' : plano[index].curso_id
                 })
