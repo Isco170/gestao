@@ -135,16 +135,26 @@ async function readAll(request, response) {
                 data: null
             })
 
+        
         let planos = []
         for (let index = 0; index < plano.length; index++) {
-            const listaItens = await planoitensModel.findAll({ where: { planoanalitico_id: plano[index].plano.id } });
-            planos.push({
-                'plano_id': plano[index].plano.id,
-                'plano_descricao' : plano[index].plano.descricao,
-                'cadeira_id' : plano[index].plano.cadeira_id,
-                'curso_id' : plano[index].plano.curso_id,
-                'itens' : listaItens.length > 0 ? listaItens : null
-            })
+            try{                
+                const listaItens = await planoitensModel.findAll({ where: { planoanalitico_id: plano[index].plano.id } });
+                planos.push({
+                    'plano_id': plano[index].plano.id,
+                    'plano_descricao' : plano[index].plano.descricao,
+                    'cadeira_id' : plano[index].plano.cadeira_id,
+                    'curso_id' : plano[index].plano.curso_id,
+                    'itens' : listaItens.length > 0 ? listaItens : null
+                })
+            }
+            catch(error) {
+                return response.status(500).send({
+                    error: true,
+                    message: 'Falha ao adicionar dados',
+                    data: error
+                })
+            }
         }
 
 
