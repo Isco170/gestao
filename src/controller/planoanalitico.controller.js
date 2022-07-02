@@ -126,7 +126,7 @@ async function deletePlano(request, response){
 
 async function readAll(request, response){
     try {
-        const plano = await planoModel.findOne({});
+        const plano = await planoModel.findAll({});
 
         if(!plano)
             return response.status(404).send({
