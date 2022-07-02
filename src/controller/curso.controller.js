@@ -88,20 +88,30 @@ async function readCurso(request, response){
 
 async function readOne(request, response){
     const id = request.params.id;
-    
-    const curso = await cursoModel.findOne({where:{ id: id}});
-    if (!curso)
+
+    try {
+        const curso = await cursoModel.findOne({where:{ id: id}});
+        if (!curso)
         return response.status(404).send({
             error: true,
             message: 'Sem curso',
             data: null
         })
 
+    
     return response.status(202).send({
         error: false,
         message: 'Curso',
         data: curso
     })
+    } catch (error) {
+        return response.status(500).send({
+            error: true,
+            message: 'Falha ao buscar curso',
+            data: error
+        })
+    }
+
 }
 
 async function updateCurso(request, response){
