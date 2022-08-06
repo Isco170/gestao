@@ -72,10 +72,10 @@ async function readCadeiras(request, response){
                 lista.push({
                     'id': cadeira.id,
                     'descricao': cadeira.descricao,
-                    'curso': curso.descricao
+                    'curso': curso.descricao,
+                    'curso_id': curso.id
                 })
             } catch (error) {
-                
             }
         }
         return response.status(202).send({
