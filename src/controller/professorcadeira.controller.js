@@ -31,43 +31,36 @@ async function addCadeira(request, response) {
             data: null
         })
 
-    for (let index = 0; index < cadeiras.length; index++) {
-        try {
-            const existe = await cursocadeiraModel.findOne({ where: { curso_id: curso, cadeira_id: cadeiras[index] } })
-            if (existe) {
+    try {
+        const existe = await cursocadeiraModel.findOne({ where: { curso_id: curso, cadeira_id: cadeiras } })
+        if (existe) {
+            try {
+                const tem = await profCadeira.findOne({ where: { cadeira_id: cadeiras, usuario_id: usuario_id, curso_id: curso } });
+                if (!tem)
                     try {
-                        const tem = await profCadeira.findOne({where:{cadeira_id: cadeiras[index], usuario_id: usuario_id, curso_id: curso}});
-                        if(!tem)
-                            try {
-                                await profCadeira.create({ cadeira_id: cadeiras[index], usuario_id: usuario_id, curso_id: curso });   
-                            } catch (error) {
-                                return response.status(204).send({
-                                    error: true,
-                                    message: "Falha ao adicionar cadeira ao professor",
-                                    data: null
-                                })
-                            }
+                        await profCadeira.create({ cadeira_id: cadeiras, usuario_id: usuario_id, curso_id: curso });
                     } catch (error) {
-                        return response.status(404).send({
+                        return response.status(204).send({
                             error: true,
-                            message: "Falha verificando se professor ja tem cadeira",
+                            message: "Falha ao adicionar cadeira ao professor",
                             data: null
                         })
                     }
+            } catch (error) {
+                return response.status(404).send({
+                    error: true,
+                    message: "Falha verificando se professor ja tem cadeira",
+                    data: null
+                })
             }
-        } catch (error) {
-            return response.status(404).send({
-                error: true,
-                message: 'Cadeira e curso não definidos',
-                data: null
-            })
         }
+    } catch (error) {
+        return response.status(404).send({
+            error: true,
+            message: 'Cadeira e curso não definidos',
+            data: null
+        })
     }
-    return response.status(202).send({
-        error: false,
-        message: 'Cadeiras atribuidas',
-        data: null
-    })
 }
 
 async function readCadeiras(request, response) {
