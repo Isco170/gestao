@@ -1,5 +1,6 @@
 const cursoCadeiraModel = require('../model/cursocadeira.model');
 const cadeiraModel = require('../model/cadeira.model');
+const cursoModel = require('../model/curso.model');
 
 async function create(request, response) {
     const { curso_id, cadeiras } = request.body;
@@ -118,8 +119,29 @@ async function removeCadeira(request, response){
     })
 }
 
+async function lerCadeiras(request, response){
+    const cadCurso = await cursoCadeiraModel.findAll();
+    var resp = [];
+    for (let index = 0; index < cadCurso.length; index++) {
+        const curso = await cursoModel.findOne({where:{id: cadCurso[index].curso_id}});
+        const cadeira = await cadeiraModel.findOne({ where:{ id: cadCurso[index].cadeira_id}});
+        resp.push({
+            'id' : cadCurso[index].id,
+            'cadeira_id': cadeira.id,
+            'curso_id': curso.id,
+            'descricao': curso.descricao +' '+ cadeira.descricao
+        })
+    }
+
+    return response.status(200).send({
+        error: false,
+        message: 'Lista de cursos e cadeiras',
+        data: resp
+    })
+}
 module.exports = {
     create,
     read,
-    removeCadeira
+    removeCadeira,
+    lerCadeiras
 }
