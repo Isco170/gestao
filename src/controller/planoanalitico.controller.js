@@ -1,5 +1,7 @@
 const planoModel = require('../model/planoanalitico.model');
 const planoitensModel = require('../model/planoitens.model');
+const cursocadeiraModel = require('../model/cursocadeira.model')
+const cursoModel = require('../model/curso.model');
 
 async function createPlano(request, response) {
     const { descricao, cadeira_id, curso_id } = request.body;
@@ -19,7 +21,7 @@ async function createPlano(request, response) {
 
     if (!curso_id) {
         falha = true;
-        msg.push('Selecione o curso da cadeira');
+        msg.push('Selecione o curso que deseja adicionar o plano da cadeira');
     }
 
     if (falha)
@@ -30,12 +32,22 @@ async function createPlano(request, response) {
         })
 
     try {
-        const newPlano = await planoModel.create({ descricao: descricao, cadeira_id: cadeira_id, curso_id: curso_id });
-        return response.status(202).send({
-            error: false,
-            message: 'Plano adicionado',
-            data: newPlano
-        })
+        const existe = await cursocadeiraModel.findOne({ where: { curso_id: curso_id, cadeira_id: cadeira_id } })
+        
+        if(existe){
+            const newPlano = await planoModel.create({ descricao: descricao, cadeira_id: cadeira_id, curso_id: curso_id });
+            return response.status(202).send({
+                error: false,
+                message: 'Plano adicionado',
+                data: newPlano
+            })
+        }else{
+            return response.status(400).send({
+                error: true,
+                message: 'Cadeira não faz parte do curso',
+                data: error
+            })    
+        }
     } catch (error) {
         return response.status(500).send({
             error: true,
@@ -47,15 +59,10 @@ async function createPlano(request, response) {
 }
 
 async function readPlano(request, response) {
-    const { curso_id, cadeira_id } = request.body;
+    const { cadeira_id } = request.body;
 
     let msg = [];
     let falha = false;
-
-    if (!curso_id) {
-        falha = true;
-        msg.push('Selecione o curso da cadeira');
-    }
 
     if (!cadeira_id) {
         falha = true;
@@ -70,7 +77,7 @@ async function readPlano(request, response) {
         })
 
     try {
-        const plano = await planoModel.findOne({ where: { curso_id: curso_id, cadeira_id: cadeira_id } });
+        const plano = await planoModel.findOne({ where: { cadeira_id: cadeira_id } });
 
         if (!plano)
             return response.status(404).send({
@@ -78,6 +85,7 @@ async function readPlano(request, response) {
                 message: 'Plano não foi achado',
                 data: null
             })
+        const curso = await cursoModel.findOne({where:{id: plano.curso_id}});
         const listaItens = await planoitensModel.findAll({ where: { planoanalitico_id: plano.id } });
 
         return response.status(202).send({
@@ -86,6 +94,8 @@ async function readPlano(request, response) {
             data: {
                 'plano_id': plano.id,
                 'plano_descricao': plano.descricao,
+                'curso_id': plano.curso_id,
+                'curso_descricao': curso.descricao,
                 'itens': listaItens.length > 0 ? listaItens : null
             }
         })
@@ -143,8 +153,7 @@ async function readAll(request, response) {
                 planos.push({
                     'plano_id': plano[index].id,
                     'plano_descricao' : plano[index].descricao,
-                    'cadeira_id' : plano[index].cadeira_id,
-                    'curso_id' : plano[index].curso_id
+                    'cadeira_id' : plano[index].cadeira_id
                 })
             }
             catch(error) {
