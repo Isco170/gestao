@@ -39,6 +39,11 @@ async function addCadeira(request, response) {
                 if (!tem)
                     try {
                         await profCadeira.create({ cadeira_id: cadeiras, usuario_id: usuario_id, curso_id: curso });
+                        return response.status(202).send({
+                            error: false,
+                            message: 'Cadeira adicionada',
+                            data: null
+                        })
                     } catch (error) {
                         return response.status(204).send({
                             error: true,
