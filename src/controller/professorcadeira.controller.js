@@ -41,12 +41,26 @@ async function addCadeira(request, response) {
                             try {
                                 await profCadeira.create({ cadeira_id: cadeiras[index], usuario_id: usuario_id, curso_id: curso });   
                             } catch (error) {
+                                return response.status(204).send({
+                                    error: true,
+                                    message: "Falha ao adicionar cadeira ao professor",
+                                    data: null
+                                })
                             }
                     } catch (error) {
-
+                        return response.status(404).send({
+                            error: true,
+                            message: "Falha verificando se professor ja tem cadeira",
+                            data: null
+                        })
                     }
             }
         } catch (error) {
+            return response.status(404).send({
+                error: true,
+                message: 'Cadeira e curso não definidos',
+                data: null
+            })
         }
     }
     return response.status(202).send({
