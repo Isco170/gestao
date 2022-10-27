@@ -2,6 +2,7 @@ const planoModel = require('../model/planoanalitico.model');
 const planoitensModel = require('../model/planoitens.model');
 const cursocadeiraModel = require('../model/cursocadeira.model')
 const cursoModel = require('../model/curso.model');
+const cadeiraModel = require('../model/cadeira.model')
 
 async function createPlano(request, response) {
     const { descricao, cadeira_id, curso_id } = request.body;
@@ -150,10 +151,12 @@ async function readAll(request, response) {
         for (let index = 0; index < plano.length; index++) {
             try{                
                 const listaItens = await planoitensModel.findAll({ where: { planoanalitico_id: plano[index].id } });
+                const cadeira = await cadeiraModel.findOne({where:{id: plano[index].cadeira_id}});
                 planos.push({
                     'plano_id': plano[index].id,
                     'plano_descricao' : plano[index].descricao,
-                    'cadeira_id' : plano[index].cadeira_id
+                    'cadeira_id' : cadeira.id,
+                    'cadeira_descricao': cadeira.descricao
                 })
             }
             catch(error) {

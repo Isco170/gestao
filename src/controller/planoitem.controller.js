@@ -10,7 +10,7 @@ async function createItem(request, response){
         falha = true;
         msg.push('Falta a descrição');
     }
-
+ 
     if (!planoanalitico_id) {
         falha = true;
         msg.push('Selecione o plano ao qual deseja adicionar o tema');
