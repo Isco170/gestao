@@ -1,13 +1,38 @@
 # Requisitos Funcionais
 
-## gestão pedagogica ( O pedagogico deverá)
-* Criar conta pedagogica
+## Gestão pedagogica
+* Criar
 * Ver dados da conta
+* gestão de coordenadores
 
-## gestão dos coordenadores
-## gestão dos professores
-## gestão de cursos
-## gestão de turmas
-## gestão de cadeiras
-## gestão de planos analiticos
-## gestão de turmas
+## Gestão dos coordenadores
+* criar
+* listar
+* atribuir, remover e listar cursos atribuidos
+
+## Gestão dos docentes
+* criar conta docente
+* listar docentes (pedagogico e coordenador)
+* ver e marcar plano analitico como feito
+
+## Gestão de cursos
+* criar (pedagogico)
+* listar (pedagogico)
+* indicar o coordenador (pedagogico)
+* adicionar, listar e remover cadeiras (coordenador)
+
+## Gestão de cadeiras
+* criar
+* modificar
+* listar
+* remover
+* criar, listar e remover plano analitico
+
+## Gestão de turmas
+* criar
+* listar
+
+
+## Gestão de turmas
+* criar
+* listar
